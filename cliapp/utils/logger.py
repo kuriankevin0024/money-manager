@@ -1,6 +1,6 @@
 import sys
 import logging
-import common.configuration as configuration
+import utils.configuration as configuration
 
 class MaxLevelFilter(logging.Filter):
     def __init__(self, max_level):

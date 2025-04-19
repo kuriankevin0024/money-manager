@@ -1,7 +1,7 @@
 import os
 import re
 import pathlib
-import common.validate as validate
+import utils.validate as validate
 
 def snake_case(value: str) -> bool:
     pattern: re.Pattern = re.compile(pattern=r'^[a-z]+(?:_[a-z]+)*$')

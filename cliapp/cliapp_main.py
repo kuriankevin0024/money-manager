@@ -1,8 +1,8 @@
-import common.check as check
-import common.validate as validate
-import common.configuration as conf
+import utils.check as check
+import utils.validate as validate
+import utils.configuration as conf
 
-from common.logger import log
+from utils.logger import log
 
 def prerequisites():
     validate.snake_case(value=conf.APPLICATION_NAME)
