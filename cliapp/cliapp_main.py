@@ -1,18 +1,20 @@
-import utils.check as check
-import utils.validate as validate
-import utils.configuration as conf
+import utils.configuration as config
 
-from utils.logger import log
+import logging
+from utils.logger import ApplicationLogger
 
-def prerequisites():
-    validate.snake_case(value=conf.APPLICATION_NAME)
-    validate.folder_write_permissions(path=conf.LOG_PATH)
-    if check.file_exists(path=conf.LOG_FILE_PATH):
-        validate.file_write_permissions(path=conf.LOG_FILE_PATH)
+application_logger: ApplicationLogger = ApplicationLogger(
+    application_name=config.APPLICATION_NAME, log_file_path=config.LOG_FILE_PATH)
+logger: logging.Logger = application_logger.get_logger()
+
+
+def validate_prerequisites():
+    pass
+
 
 if __name__ == '__main__':
-    print(f"application '{conf.APPLICATION_NAME}' starting...")
-    prerequisites()
-    log.info(f"application '{conf.APPLICATION_NAME}' starting...")
+    print(f"application '{config.APPLICATION_NAME}' starting...")
+    validate_prerequisites()
+    logger.info(f"application '{config.APPLICATION_NAME}' starting...")
 
-    log.info(f'application execution completed')
+    logger.info(f'application execution completed')

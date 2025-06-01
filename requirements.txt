@@ -1,5 +1,5 @@
 # cliapp dependencies
-pydantic==2.11.3
+pydantic==2.11.5
 
 # test dependencies
 pytest==8.3.5
