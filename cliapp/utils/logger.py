@@ -2,6 +2,7 @@ import sys
 import logging
 import pathlib
 import utils.check as check
+import utils.helper as helper
 import utils.validate as validate
 import utils.configuration as config
 
@@ -32,7 +33,7 @@ class ApplicationLogger:
         formatter: logging.Formatter = logging.Formatter(
             fmt='%(asctime)s - %(name)s - %(levelname)s - %(filename)s - %(funcName)s - %(message)s')
 
-        validate.snake_case(value=self.__application_name)
+        validate.is_snake_case(value=self.__application_name)
         logger: logging.Logger = logging.getLogger(name=self.__application_name)
         logger.setLevel(level=config.ROOT_LOG_LEVEL)
 
@@ -47,12 +48,7 @@ class ApplicationLogger:
         stderr_handler.setFormatter(fmt=formatter)
         logger.addHandler(hdlr=stderr_handler)
 
-        if self.__log_file_path is not None:
-            log_path = self.__log_file_path.resolve().parent
-            validate.folder_write_permissions(path=log_path)
-            if check.file_exists(path=self.__log_file_path):
-                validate.file_write_permissions(path=self.__log_file_path)
-
+        if ApplicationLogger.write_logs(log_file=self.__log_file_path):
             file_handler: logging.FileHandler = logging.FileHandler(filename=self.__log_file_path)
             file_handler.setLevel(level=config.FILE_LOG_LEVEL)
             file_handler.setFormatter(fmt=formatter)
@@ -65,3 +61,19 @@ class ApplicationLogger:
         if cls.__logger is None:
             raise LoggerNotInitializedError("create instance of ApplicationLogger before calling get_logger()")
         return cls.__logger
+
+    @staticmethod
+    def write_logs(log_file: pathlib.Path):
+        if log_file is None:
+            return False
+        if not check.is_path_absolute(log_file):
+            return False
+        log_path = helper.get_parent_directory(log_file)
+        if not (check.does_folder_exist(log_path) and check.is_folder_writable(log_path)):
+            return False
+        if check.does_file_exist(log_file):
+            if check.is_file_writable(log_file):
+                return True
+            else:
+                return False
+        return True

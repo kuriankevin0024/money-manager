@@ -3,8 +3,7 @@ import utils.configuration as config
 import logging
 from utils.logger import ApplicationLogger
 
-application_logger: ApplicationLogger = ApplicationLogger(
-    application_name=config.APPLICATION_NAME, log_file_path=config.LOG_FILE_PATH)
+application_logger: ApplicationLogger = ApplicationLogger(application_name=config.APPLICATION_NAME)
 logger: logging.Logger = application_logger.get_logger()
 
 
