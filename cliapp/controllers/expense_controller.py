@@ -1,3 +1,4 @@
+import logging
 import uvicorn
 from datetime import date
 from typing import Optional, Any
@@ -7,17 +8,19 @@ from fastapi import FastAPI, HTTPException, Query, status, Response
 from persistence.db import initialize_db
 from services.expense_service import ExpenseService
 from models.expense_model import ExpenseModel, ExpenseSchema
+from utils.logger import ApplicationLogger
 
 application = FastAPI()
 expense_service = ExpenseService()
+logger: logging.Logger = ApplicationLogger.get_logger()
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    print(f'Uvicorn server is starting up...')
+    logger.info(f'Uvicorn server is starting up...')
     initialize_db()
     yield
-    print(f'Uvicorn server shutdown completed.')
+    logger.info(f'Uvicorn server shutdown completed.')
 
 
 application.router.lifespan_context = lifespan
